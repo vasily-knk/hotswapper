@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "lib_wrapper.h"
+#include "common/lib_wrapper.h"
 
 int main()
 {
-    lib_wrapper lib(L"library.dll");
+    lib_wrapper lib(L"proxy.dll");
 
     typedef bool (__cdecl *do_something_t)(uint32_t src, uint32_t *dst);
 

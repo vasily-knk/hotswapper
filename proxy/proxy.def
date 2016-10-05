@@ -1,0 +1,3 @@
+LIBRARY "proxy"
+EXPORTS
+  do_something
