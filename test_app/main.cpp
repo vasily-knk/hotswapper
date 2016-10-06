@@ -9,8 +9,16 @@ int main()
 
     auto f = lib.get_function<do_something_t>("do_something");
     
-    uint32_t dst;
-    bool result = f(5, &dst);
+    uint32_t src = 1, dst;
+    while(true)
+    {
+        bool result = f(src, &dst);
+
+        src = dst;
+
+        cout << dst << endl;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
 
     return 0;
 }

@@ -1,0 +1,4 @@
+LIBRARY "executor"
+EXPORTS
+  create_executor
+  delete_executor
