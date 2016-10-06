@@ -14,7 +14,7 @@ struct lib_wrapper
     {}
 
     template<typename Func>
-    Func get_function(char const *name)
+    Func get_function(char const *name) const
     {
         return reinterpret_cast<Func>(GetProcAddress(lib_, name));
     }
