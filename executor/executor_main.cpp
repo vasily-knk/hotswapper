@@ -15,9 +15,9 @@ namespace
         bool do_something(uint32_t src, uint32_t* dst) override
         {
             auto result = f_->do_something(src, dst);
-            *dst += 2;
+            *dst = 21;
 
-            return result;
+            return false;
         }
 
     private:

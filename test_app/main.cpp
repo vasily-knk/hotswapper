@@ -10,9 +10,11 @@ int main()
     auto f = lib.get_function<do_something_t>("do_something");
     
     uint32_t src = 1, dst;
-    while(true)
+    
+    bool result = true;
+    while(result)
     {
-        bool result = f(src, &dst);
+        result = f(src, &dst);
 
         src = dst;
 

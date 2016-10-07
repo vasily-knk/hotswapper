@@ -62,6 +62,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>executor.def</ModuleDefinitionFile>
     </Link>
+    <PostBuildEvent>
+      <Command>echo hi &gt; $(OutDir)ready.txt</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -78,6 +81,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>executor.def</ModuleDefinitionFile>
     </Link>
+    <PostBuildEvent>
+      <Command>echo hi &gt; $(OutDir)ready.txt</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="executor_main.cpp" />

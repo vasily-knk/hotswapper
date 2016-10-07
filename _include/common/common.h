@@ -26,5 +26,6 @@ using std::make_unique;
 
 #include <boost/optional.hpp>
 using boost::optional;
+using boost::none;
 
 #include <boost/thread.hpp>

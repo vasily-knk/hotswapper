@@ -5,6 +5,16 @@
 
 namespace
 {
+    optional<std::time_t> ready_time() 
+    {
+        fs::path ready_path("ready.txt");
+        
+        if (fs::is_regular_file(ready_path))
+            return fs::last_write_time(ready_path);
+
+        return none;
+    }
+
     struct executor_lib_t
     {
         explicit executor_lib_t(char const *name, functions_cptr functions)
@@ -37,20 +47,6 @@ namespace
         executor_ptr executor_;
     };
 
-    void copy_executor_lib()
-    {
-        fs::path src_lib = "executor.dll";
-        fs::path dst_lib = "_executor.dll";
-
-        fs::path src_pdb = "executor.pdb";
-        fs::path dst_pdb = "_executor.pdb";
-
-        fs::copy_file(src_lib, dst_lib, fs::copy_option::overwrite_if_exists);
-
-        if (fs::is_regular_file(src_pdb))
-            fs::copy_file(src_pdb, dst_pdb, fs::copy_option::overwrite_if_exists);
-    }
-
 } // namespace
 
 struct executor_manager_impl
@@ -58,6 +54,7 @@ struct executor_manager_impl
 {
     executor_manager_impl()
         : time_to_die_(false)
+        , copy_time_(ready_time())
     {
         {
             boost::unique_lock<boost::shared_mutex> lock(mutex_);
@@ -80,6 +77,21 @@ struct executor_manager_impl
     }
 
 private:
+   
+    void copy_executor_lib()
+    {
+        fs::path src_lib = "executor.dll";
+        fs::path dst_lib = "_executor.dll";
+
+        fs::path src_pdb = "executor.pdb";
+        fs::path dst_pdb = "_executor.pdb";
+
+        fs::copy_file(src_lib, dst_lib, fs::copy_option::overwrite_if_exists);
+
+        if (fs::is_regular_file(src_pdb))
+            fs::copy_file(src_pdb, dst_pdb, fs::copy_option::overwrite_if_exists);
+    }
+    
     void init_lib()
     {
         cout << "Copying lib" << endl;
@@ -87,19 +99,25 @@ private:
         lib_ = make_unique<executor_lib_t>("_executor.dll", functions_instance());
     }
 
-    bool need_update() const
+    optional<std::time_t> need_update() const
     {
-        return true;
+        if (auto t = ready_time())
+            if (!copy_time_ || *t > *copy_time_)
+                return *t;
+
+        return none;
     }
 
     void watch_thread_fn() 
     {
         while(!time_to_die_)
         {
-            boost::this_thread::sleep_for(boost::chrono::seconds(10));
+            boost::this_thread::sleep_for(boost::chrono::seconds(2));
 
-            if (need_update())
+            if (auto t = need_update())
             {
+                copy_time_ = *t;
+
                 boost::unique_lock<boost::shared_mutex> lock(mutex_);
 
                 weak_ptr<executor> w = lib_->get_executor();
@@ -111,6 +129,8 @@ private:
                 init_lib();
             }
         }
+
+        cout << "Good bye!" << endl;
     }
 
 private:
@@ -119,6 +139,8 @@ private:
 
     boost::thread watch_thread_;
     boost::atomic<bool> time_to_die_;
+
+    optional<std::time_t> copy_time_;
 };
 
 executor_manager_ptr executor_manager_instance()
