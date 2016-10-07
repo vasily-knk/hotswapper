@@ -12,14 +12,19 @@ using std::endl;
 #include <memory>
 using std::shared_ptr;
 using std::make_shared;
+using std::weak_ptr;
+
 
 using std::unique_ptr;
 using std::make_unique;
 
-#include <thread>
+#include <atomic>
+
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #include <boost/optional.hpp>
 using boost::optional;
+
+#include <boost/thread.hpp>

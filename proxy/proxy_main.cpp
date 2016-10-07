@@ -3,12 +3,16 @@
 #include "common/functions.h"
 #include "executor/executor.h"
 #include "defs.h"
+#include "executor_manager.h"
 
 
 namespace
 {
 
-
+executor_ptr executor_instance()
+{
+    return executor_manager_instance()->get_executor();
+}
 
 }
 
