@@ -80,7 +80,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="executor_manager.cpp" />
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="proxy_main.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -90,8 +89,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defs.h" />
-    <ClInclude Include="executor_manager.h" />
     <ClInclude Include="stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\executor_manager\executor_manager.vcxproj">
+      <Project>{31cd5f23-fb80-471e-a8fc-b7a029d4bb17}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

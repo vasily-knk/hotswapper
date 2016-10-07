@@ -27,5 +27,11 @@
     <ClInclude Include="common\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="executor\executor_fwd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="executor_manager\executor_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
