@@ -15,7 +15,7 @@ namespace
         bool do_something(uint32_t src, uint32_t* dst) override
         {
             auto result = f_->do_something(src, dst);
-            *dst += 1;
+            *dst += 10;
 
             return true;
         }
@@ -27,12 +27,12 @@ namespace
 } // namespace
 
 
-executor* create_executor(functions_cptr functions)
+void* create_executor(functions_cptr functions)
 {
     return new executor_impl(functions);
 }
 
-void delete_executor(executor *e)
+void delete_executor(void *p)
 {
-    delete e;
+    delete p;
 }

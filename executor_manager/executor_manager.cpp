@@ -5,6 +5,9 @@
 namespace executor_manager
 {
 
+namespace internal
+{
+
 struct manager_impl
     : manager
 {
@@ -27,7 +30,7 @@ struct manager_impl
         watch_thread_.join();
     }
 
-    executor_ptr get_executor() override
+    shared_ptr<void> get_executor() override
     {
         boost::shared_lock<boost::shared_mutex> lock(mutex_);
         return lib_->get_executor();
@@ -73,7 +76,7 @@ private:
 
                 boost::unique_lock<boost::shared_mutex> lock(mutex_);
 
-                weak_ptr<executor> w = lib_->get_executor();
+                weak_ptr<void> w = lib_->get_executor();
                 lib_->shutdown();
                 while(!w.expired())
                     boost::this_thread::sleep_for(boost::chrono::seconds(1));
@@ -108,11 +111,12 @@ private:
     optional<std::time_t> copy_time_;
 };
 
-manager_ptr create(parameters_t const &parameters)
+manager_ptr create_manager(parameters_t const &parameters)
 {
     static auto g_manager = make_shared<manager_impl>(parameters);
     return g_manager;
 }
 
+} // namespace internal
 } // namespace executor_manager
           

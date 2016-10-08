@@ -7,6 +7,10 @@ namespace executor_manager
 {
     struct executor_lib_t
     {
+        typedef shared_ptr<void> executor_ptr;
+        typedef void const *functions_cptr;
+
+        
         explicit executor_lib_t(char const *name, functions_cptr functions)
             : lib_(name)
             , executor_(create_executor(functions))
@@ -25,10 +29,13 @@ namespace executor_manager
     private:
         executor_ptr create_executor(functions_cptr functions) const
         {
+            typedef void* (__cdecl *create_executor_f)(functions_cptr functions);
+            typedef void (__cdecl *delete_executor_f)(void *);
+            
             auto f_create = lib_.get_function<create_executor_f>("create_executor");
             auto f_delete = lib_.get_function<delete_executor_f>("delete_executor");
 
-            executor *e = f_create(functions);
+            auto e = f_create(functions);
             return executor_ptr(e, f_delete);
         }
 
